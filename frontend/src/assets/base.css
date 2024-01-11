@@ -1,0 +1,4 @@
+:root {
+  --main-header: 38px;
+  --main-height: calc(100vh - var(--main-header));
+}

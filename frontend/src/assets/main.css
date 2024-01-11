@@ -1,0 +1,81 @@
+@import './base.css';
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  background: #dee0df;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a,
+a:focus,
+a:hover {
+  color: inherit;
+  outline: none;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.layout-header {
+  position: absolute;
+  background-color: #f0f0f0;
+  box-shadow: 0 1px 3px hsla(0, 0%, 13%, 0.1);
+  height: var(--main-header);
+  left: 0px;
+  width: 100%;
+  z-index: 3000;
+}
+
+.layout-body {
+  position: absolute;
+  top: var(--main-header);
+  width: 100%;
+}
+
+.layout-sidebar {
+  width: 60px;
+  height: var(--main-height);
+  float: left;
+  background-color: #f2f2f2;
+  box-shadow: 0 1px 3px hsla(0, 0%, 7%, 0.1);
+}
+
+.layout-main {
+  width: calc(100% - 60px);
+  float: left;
+}
+
+.main {
+  width: 100%;
+  float: left;
+}
+
+.app-container {
+  box-shadow: 0 1px 3px hsla(0, 0%, 7%, 0.1);
+  height: calc(var(--main-height) - 20px);
+  padding: 10px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  margin: 10px 10px 0 10px;
+}
