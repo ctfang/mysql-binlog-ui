@@ -1,0 +1,12 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "mysql-binlog-ui",
+  "outputfilename": "mysql-binlog-ui",
+  "frontend:build": "pnpm run build",
+  "frontend:dev:watcher": "pnpm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "yuanzhao",
+    "email": "2206582181@qq.com"
+  }
+}
