@@ -7,6 +7,7 @@ toolchain go1.21.3
 require (
 	github.com/go-home-admin/home v0.5.16
 	github.com/go-mysql-org/go-mysql v1.7.0
+	github.com/sirupsen/logrus v1.8.1
 	github.com/wailsapp/wails/v2 v2.7.1
 	gorm.io/driver/sqlite v1.5.4
 	gorm.io/gorm v1.25.5
@@ -57,7 +58,6 @@ require (
 	github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24 // indirect
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 // indirect
 	github.com/siddontang/go-log v0.0.0-20180807004314-8d05993dda07 // indirect
-	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/tkrajina/go-reflector v0.5.6 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

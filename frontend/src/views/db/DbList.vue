@@ -1,33 +1,42 @@
 <script lang="ts" setup>
-import { inject, type Ref } from 'vue'
+import { inject, ref } from "vue";
+import { GetTitleList } from "@wailsjs/go/controllers/Binlog";
+import { db } from "@/store/db";
+import { fa } from "element-plus/es/locale/index.mjs";
 
-let db = inject<Ref<any>>('db')!
+const FileList: any = ref([]);
 
-const FileList = [
-  {
-    name: '23-01',
-    size: '100kb',
-    type: 'image/jpeg',
-    url: '/static/1.jpg'
-  },
-  {
-    name: '24-05',
-    size: '100kb',
-    type: 'image/jpeg',
-    url: '/static/1.jpg'
+function GetTitle() {
+  if (db.ID == 0) {
+    return;
   }
-]
+
+  GetTitleList(db.ID).then((res) => {
+    FileList.value = res;
+  });
+}
+
+GetTitle();
+
+var selectedButton: any = ref(db.ID);
 
 function clickButton(o: any) {
-  db.value = o
+  selectedButton.value = o.ID;
+  db.ID = o.ID;
 }
 </script>
 
 <template>
   <div>
-    <el-button v-for="o in FileList" :key="o" class="item" @click="clickButton(o)">
-      {{ o.name }}
-    </el-button>
+    <div v-for="o in FileList" :key="o">
+      <el-button
+        class="item"
+        @click="clickButton(o)"
+        :class="{ 'is-selected': selectedButton === o.ID }"
+      >
+        {{ o.Table }}
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -40,6 +49,12 @@ function clickButton(o: any) {
   margin-right: 10px;
   padding: 5px;
   text-align: center;
+  box-sizing: border-box;
+}
+
+.is-selected {
+  background-color: #66c23a; /* 选中状态的背景色 */
+  color: white; /* 选中状态的文字颜色 */
 }
 </style>
 å

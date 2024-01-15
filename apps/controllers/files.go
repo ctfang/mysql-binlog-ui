@@ -2,11 +2,10 @@ package controllers
 
 import (
 	"changeme/apps/ctx"
-	"changeme/apps/datas"
 	"changeme/apps/mysql"
+	"changeme/apps/orm"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
-	"io/ioutil"
-	"path/filepath"
+	"os"
 )
 
 // Files @Bean
@@ -35,7 +34,6 @@ func (f *Files) GetSystemFile() string {
 		return ""
 	}
 
-	ctx.LogDebug("上传文件 path = " + path)
 	err = mysql.SaveToSqlite(path)
 	if err != nil {
 		return err.Error()
@@ -47,31 +45,33 @@ func (f *Files) GetDecodeRowCount() uint64 {
 	return mysql.DecodeRowCount
 }
 
-func (f *Files) GetTitleList() []string {
-	path := datas.GetSqlitePath("")
-	arr, err := getDBFiles(path)
-	if err != nil {
-		return nil
-	}
-	got := make([]string, 0)
-	for _, s := range arr {
-		got = append(got, s)
-	}
-	return got
+type TitleData struct {
+	List  []*orm.UploadLogs
+	Total int64
 }
 
-func getDBFiles(dir string) ([]string, error) {
-	files, err := ioutil.ReadDir(dir) // 读取目录下所有文件
-	if err != nil {
-		return nil, err
+// GetTitleList 获取标题列表
+func (f *Files) GetTitleList(page int, limit int) TitleData {
+	got, count := orm.NewOrmUploadLogs().Paginate(page, limit)
+
+	for _, logs := range got {
+		logs.FileSize = float64(int(logs.FileSize))
 	}
 
-	var dbFiles []string
-	for _, file := range files {
-		if !file.IsDir() && filepath.Ext(file.Name()) == ".db" {
-			dbFiles = append(dbFiles, file.Name()) // 输出.db后缀的文件名
+	return TitleData{
+		List:  got,
+		Total: count,
+	}
+}
+
+func (f *Files) DeleteFile(ID int64) {
+	file, ok := orm.NewOrmUploadLogs().WhereId(ID).First()
+	if ok {
+		orm.NewOrmUploadLogs().WhereId(ID).Delete()
+
+		err := os.Remove(file.Database)
+		if err != nil {
+			ctx.LogDebug("del err = ", err)
 		}
 	}
-
-	return dbFiles, nil
 }

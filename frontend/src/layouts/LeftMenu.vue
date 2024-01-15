@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { AppMenu } from '@/router/index'
+import { AppMenu } from "@/router/index";
 </script>
 
 <template>
@@ -49,8 +49,8 @@ import { AppMenu } from '@/router/index'
 .menu-icon {
   box-sizing: border-box;
   padding-left: 7px;
-  padding-top: 6px;
-  width: 30px;
+  padding-top: 7px;
+  width: 31px;
 }
 .bottom-div {
   position: absolute;

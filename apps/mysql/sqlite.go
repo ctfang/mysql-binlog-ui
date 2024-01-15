@@ -28,13 +28,11 @@ func getSqliteDBName(binlogFilePath string) (dbPath, table string) {
 	return datas.GetSqlitePath(dbPath), "logs_" + table
 }
 
-// 链接指定 db 必须手动关闭
-func getDB(binlogFilePath string) (*gorm.DB, string, error) {
-	dbPath, table := getSqliteDBName(binlogFilePath)
-
+// GetDB 链接指定 db 必须手动关闭
+func GetDB(dbPath, table string) (*gorm.DB, error) {
 	savePath := path.Dir(dbPath)
 	if err := os.MkdirAll(savePath, 0755); err != nil {
-		return nil, "", err
+		return nil, err
 	}
 
 	newLogger := logger.New(
@@ -48,12 +46,12 @@ func getDB(binlogFilePath string) (*gorm.DB, string, error) {
 	})
 	if err != nil {
 		if err != nil {
-			return nil, "", err
+			return nil, err
 		}
 	}
 	ctx.LogDebug("写入 sqlite = " + dbPath)
 	create(db, table)
-	return db, table, err
+	return db, err
 }
 
 func create(db *gorm.DB, table string) {

@@ -45,3 +45,21 @@ func GetPath(path string) string {
 func GetSqlitePath(path string) string {
 	return GetPath("/sqlite/" + path)
 }
+
+// GetFileSizeMB 返回文件大小，单位为MB
+func GetFileSizeMB(filePath string) float64 {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return 0
+	}
+	defer file.Close()
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return 0
+	}
+
+	// 获取文件大小，并转换为MB
+	fileSizeMB := float64(fileInfo.Size()) / 1024 / 1024
+	return fileSizeMB
+}

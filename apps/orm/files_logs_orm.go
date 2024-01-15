@@ -9,7 +9,10 @@ import (
 
 type UploadLogs struct {
 	ID        int64     `gorm:"column:id"`
+	Database  string    `gorm:"column:database"`
+	Table     string    `gorm:"column:table"`
 	File      string    `gorm:"column:file"`
+	FileSize  float64   `gorm:"column:file_size"`
 	Status    int64     `gorm:"column:status"`
 	Msg       string    `gorm:"column:msg"`
 	Timestamp time.Time `gorm:"column:timestamp"`
@@ -20,7 +23,7 @@ type OrmUploadLogs struct {
 }
 
 func NewOrmUploadLogs() *OrmUploadLogs {
-	return &OrmUploadLogs{db: GetDB()}
+	return &OrmUploadLogs{db: GetDB().Model(&UploadLogs{})}
 }
 
 func (receiver *UploadLogs) TableName() string {
@@ -298,28 +301,33 @@ func (orm *OrmUploadLogs) Or(fuc func(orm *OrmUploadLogs)) *OrmUploadLogs {
 	return orm
 }
 
-func (orm *OrmUploadLogs) WhereId(val int32) *OrmUploadLogs {
+func (orm *OrmUploadLogs) WhereId(val int64) *OrmUploadLogs {
 	orm.db.Where("`id` = ?", val)
 	return orm
 }
 
-func (orm *OrmUploadLogs) WhereIdIn(val []int32) *OrmUploadLogs {
+func (orm *OrmUploadLogs) WhereIdIn(val []int64) *OrmUploadLogs {
 	orm.db.Where("`id` IN ?", val)
 	return orm
 }
-func (orm *OrmUploadLogs) WhereIdGt(val int32) *OrmUploadLogs {
+func (orm *OrmUploadLogs) WhereIdGt(val int64) *OrmUploadLogs {
 	orm.db.Where("`id` > ?", val)
 	return orm
 }
-func (orm *OrmUploadLogs) WhereIdGte(val int32) *OrmUploadLogs {
+func (orm *OrmUploadLogs) WhereIdGte(val int64) *OrmUploadLogs {
 	orm.db.Where("`id` >= ?", val)
 	return orm
 }
-func (orm *OrmUploadLogs) WhereIdLt(val int32) *OrmUploadLogs {
+func (orm *OrmUploadLogs) WhereIdLt(val int64) *OrmUploadLogs {
 	orm.db.Where("`id` < ?", val)
 	return orm
 }
-func (orm *OrmUploadLogs) WhereIdLte(val int32) *OrmUploadLogs {
+func (orm *OrmUploadLogs) WhereIdLte(val int64) *OrmUploadLogs {
 	orm.db.Where("`id` <= ?", val)
+	return orm
+}
+
+func (orm *OrmUploadLogs) WhereDatabase(val string) *OrmUploadLogs {
+	orm.db.Where("`database` = ?", val)
 	return orm
 }

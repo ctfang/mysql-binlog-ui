@@ -1,66 +1,85 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { genFileId } from 'element-plus'
-import LogsList from './binlog/LogsList.vue'
-import { GetSystemFile, GetDecodeRowCount } from '@wailsjs/go/controllers/Files'
-import { ElMessageBox } from 'element-plus'
-import { fa, tr } from 'element-plus/es/locale/index.mjs'
+import { ref } from "vue";
+import { genFileId } from "element-plus";
+import LogsList from "./binlog/LogsList.vue";
+import {
+  GetSystemFile,
+  GetDecodeRowCount,
+} from "@wailsjs/go/controllers/Files";
+import { ElMessageBox } from "element-plus";
+import { fa, tr } from "element-plus/es/locale/index.mjs";
 
-const logCount = ref(0)
-const dialogVisible = ref(false)
-const percentage = ref(0)
+const logCount = ref(0);
+const dialogVisible = ref(false);
+const percentage = ref(0);
 const colors = [
-  { color: '#f56c6c', percentage: 20 },
-  { color: '#e6a23c', percentage: 40 },
-  { color: '#5cb87a', percentage: 60 },
-  { color: '#1989fa', percentage: 80 },
-  { color: '#6f7ad3', percentage: 100 }
-]
+  { color: "#f56c6c", percentage: 20 },
+  { color: "#e6a23c", percentage: 40 },
+  { color: "#5cb87a", percentage: 60 },
+  { color: "#1989fa", percentage: 80 },
+  { color: "#6f7ad3", percentage: 100 },
+];
 
 const handleClose = (done: () => void) => {
-  ElMessageBox.confirm('退出弹窗, 解析不会中断！').then(() => {
-    done()
-  })
-}
+  ElMessageBox.confirm("退出弹窗, 解析不会中断！").then(() => {
+    done();
+  });
+};
+
+const childRef = ref();
 
 const submitUpload = () => {
-  dialogVisible.value = true
+  let temp = 0; // 防止错误立刻返回
 
   GetSystemFile().then((res) => {
-    percentage.value = 100
-    if (res != '') {
-      dialogVisible.value = false
-      ElMessageBox.alert(res, '执行失败', {
-        type: 'warning',
-        confirmButtonText: '确定'
-      })
+    temp = 1;
+    percentage.value = 100;
+    if (res != "") {
+      dialogVisible.value = false;
+      ElMessageBox.alert(res, "decode fail", {
+        type: "warning",
+        confirmButtonText: "OK",
+      });
     }
-  })
 
-  var inteID = setInterval(() => {
-    if (percentage.value <= 98) {
-      percentage.value += 1
-    } else if (percentage.value >= 100) {
-      dialogVisible.value = false
+    childRef.value.doSomething();
+  });
 
-      clearInterval(inteID)
-    }
-    GetDecodeRowCount().then((res) => {
-      logCount.value = res
-    })
-  }, 1000)
-}
+  if (temp == 0) {
+    dialogVisible.value = true;
+
+    var inteID = setInterval(() => {
+      if (percentage.value <= 98) {
+        percentage.value += 1;
+      } else if (percentage.value >= 100) {
+        dialogVisible.value = false;
+
+        clearInterval(inteID);
+      }
+      GetDecodeRowCount().then((res) => {
+        logCount.value = res;
+      });
+    }, 1000);
+  }
+};
 </script>
 
 <template>
   <div class="app-container">
     <div>
-      <el-button type="primary" @click="submitUpload">select file</el-button>
+      <el-button type="primary" @click="submitUpload">
+        Import Binlog File
+      </el-button>
     </div>
 
-    <LogsList />
+    <LogsList ref="childRef" />
 
-    <el-dialog v-model="dialogVisible" title="解析中。。。" :before-close="handleClose" center>
+    <el-dialog
+      v-model="dialogVisible"
+      title="RUNNING。。。"
+      :before-close="handleClose"
+      center
+    >
       <div class="demo-progress">
         <el-progress
           :text-inside="true"

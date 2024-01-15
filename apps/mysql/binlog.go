@@ -2,6 +2,8 @@ package mysql
 
 import (
 	"changeme/apps/ctx"
+	"changeme/apps/datas"
+	"changeme/apps/orm"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -110,7 +112,8 @@ func SaveToSqlite(binlogFilePath string) error {
 }
 
 func watchLogsChan(binlogFilePath string) {
-	db, table, err := getDB(binlogFilePath)
+	dbPath, table := getSqliteDBName(binlogFilePath)
+	db, err := GetDB(dbPath, table)
 	if err != nil {
 		ctx.LogError("watchLogsChan db err = " + err.Error() + " path = " + binlogFilePath)
 		return
@@ -120,9 +123,24 @@ func watchLogsChan(binlogFilePath string) {
 		_ = dbInstance.Close()
 	}()
 
+	logData := &orm.UploadLogs{
+		Database:  dbPath + ".db",
+		Table:     table,
+		File:      binlogFilePath,
+		FileSize:  datas.GetFileSizeMB(binlogFilePath),
+		Timestamp: time.Now(),
+	}
+	err = orm.NewOrmUploadLogs().Insert(logData)
+	if err != nil {
+		ctx.LogError("写入 logs 失败, err = ", err)
+		return
+	}
+
 	insertDatas := make([]*BinlogData, 0)
 	insertCount := 0
-	for {
+
+	loop := true
+	for loop {
 		select {
 		case data := <-logsChan:
 			insertDatas = append(insertDatas, data)
@@ -136,9 +154,14 @@ func watchLogsChan(binlogFilePath string) {
 			insertCount = 0
 			addToSqlite(db, table, insertDatas)
 			ctx.LogDebug("完成 " + binlogFilePath)
-			return
+			loop = false
+			break
 		}
 	}
+
+	logData.Status = 1
+	logData.Msg = "运行完成"
+	orm.NewOrmUploadLogs().WhereId(logData.ID).Updates(logData)
 }
 
 func addToSqlite(db *gorm.DB, table string, data []*BinlogData) {

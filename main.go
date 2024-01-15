@@ -27,7 +27,7 @@ func main() {
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:             "mysql-binlog",
-		Width:             1024,
+		Width:             1680,
 		Height:            768,
 		MinWidth:          1024,
 		MinHeight:         768,

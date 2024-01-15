@@ -7,11 +7,13 @@ import (
 
 var _BinlogSingle *Binlog
 var _FilesSingle *Files
+var _HelpSingle *Help
 
 func GetAllProvider() []interface{} {
 	return []interface{}{
 		NewBinlog(),
 		NewFiles(),
+		NewHelp(),
 	}
 }
 
@@ -28,4 +30,11 @@ func NewFiles() *Files {
 		providers.AfterProvider(_FilesSingle, "")
 	}
 	return _FilesSingle
+}
+func NewHelp() *Help {
+	if _HelpSingle == nil {
+		_HelpSingle = &Help{}
+		providers.AfterProvider(_HelpSingle, "")
+	}
+	return _HelpSingle
 }
