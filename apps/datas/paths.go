@@ -2,6 +2,7 @@ package datas
 
 import (
 	"os"
+	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -36,9 +37,14 @@ func GetDataDir(appName string) (string, error) {
 }
 
 // GetPath 根据系统类型, 返回对应保存数据的目录
-func GetPath(path string) string {
-	dir, _ := GetDataDir("mysql-binlog-ui/" + path)
-	return strings.ReplaceAll(dir, "//", "/")
+func GetPath(filePath string) string {
+	dir, _ := GetDataDir("mysql-binlog-ui/" + filePath)
+	dir = strings.ReplaceAll(dir, "//", "/")
+	savePath := path.Dir(dir)
+	if savePath == "." {
+		dir = strings.ReplaceAll(dir, "\\", "/")
+	}
+	return dir
 }
 
 // GetSqlitePath 根据系统类型, 返回对应保存数据的目录
