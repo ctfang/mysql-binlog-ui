@@ -133,22 +133,30 @@ const handleCurrentChange = (val: number) => {
         </template>
       </el-table-column>
       <el-table-column prop="ID" label="ID" width="80px" />
-      <el-table-column prop="Table" label="Table" width="180" />
-      <el-table-column prop="Event" label="Event" width="180" />
+      <el-table-column
+        prop="Table"
+        label="Table"
+        width="180"
+        show-overflow-tooltip
+      />
+      <el-table-column prop="Event" label="Event" width="100" />
       <el-table-column
         prop="Timestamp"
         label="Timestamp"
         :formatter="dateShow"
+        width="160"
       />
       <el-table-column
         prop="Row1"
         label="Before Forst Key"
         :formatter="firstKeyShow1"
+        show-overflow-tooltip
       />
       <el-table-column
         prop="Row2"
         label="After Forst Key"
         :formatter="firstKeyShow2"
+        show-overflow-tooltip
       />
     </el-table>
     <br />

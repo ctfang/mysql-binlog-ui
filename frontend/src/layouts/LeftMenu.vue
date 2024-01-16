@@ -1,25 +1,51 @@
 <script lang="ts" setup>
 import { AppMenu } from "@/router/index";
+import { ref, nextTick } from "vue";
+import Github from "@/component/icons/Github.vue";
+import { OpenURL } from "@wailsjs/go/controllers/Help";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+function goto(url: string) {
+  OpenURL(url);
+}
+
+const selectedButton = ref<string>("binlogs");
+
+router.afterEach((to, from) => {
+  // 路由变化后执行 selectButton
+  selectButton(to.name as string);
+});
+
+function selectButton(name: string) {
+  selectedButton.value = name;
+}
 </script>
 
 <template>
   <div class="layout-sidebar" style="--wails-draggable: drag">
     <div v-for="item in AppMenu" :key="item.path">
-      <div class="menu-item" v-if="item.meta">
+      <div
+        class="menu-item"
+        v-if="item.meta"
+        :class="{ 'is-selected': selectedButton === item.name }"
+      >
         <router-link :to="item.path">
           <div class="menu-icon">
-            <component :is="item.meta.icon"></component>
+            <component :is="item.meta.icon" />
           </div>
         </router-link>
       </div>
     </div>
 
-    <div class="menu-item bottom-div">
-      <router-link to="/about">
-        <div class="menu-icon">
-          <setting />
-        </div>
-      </router-link>
+    <div
+      class="menu-item bottom-div"
+      @click="goto('https://github.com/ctfang/mysql-binlog-ui')"
+    >
+      <div class="menu-icon">
+        <Github />
+      </div>
     </div>
   </div>
 </template>
@@ -48,12 +74,15 @@ import { AppMenu } from "@/router/index";
 
 .menu-icon {
   box-sizing: border-box;
-  padding-left: 7px;
-  padding-top: 7px;
-  width: 31px;
+  padding-left: 3px;
+  padding-top: 3px;
 }
 .bottom-div {
   position: absolute;
   bottom: 0px;
+}
+
+.is-selected {
+  background-color: #d9d7d7; /* 选中状态的背景色 */
 }
 </style>

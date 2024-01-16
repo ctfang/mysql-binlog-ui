@@ -9,3 +9,5 @@ export function GetDecodeRowCount():Promise<number>;
 export function GetSystemFile():Promise<string>;
 
 export function GetTitleList(arg1:number,arg2:number):Promise<controllers.TitleData>;
+
+export function SaveToSqlite(arg1:string):Promise<string>;

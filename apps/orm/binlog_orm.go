@@ -27,17 +27,17 @@ type OrmBinlog struct {
 	table    string
 }
 
-var binlogDBMap = make(map[string]*gorm.DB)
+var BinlogDBMap = make(map[string]*gorm.DB)
 
 func NewOrmBinlog(database, table string) *OrmBinlog {
 	var db *gorm.DB
 	var ok bool
-	if db, ok = binlogDBMap[database]; !ok {
+	if db, ok = BinlogDBMap[database]; !ok {
 		db = NewDB(database)
 		if db == nil {
 			return nil
 		}
-		binlogDBMap[database] = db
+		BinlogDBMap[database] = db
 	}
 
 	ctx.LogError(database, table)

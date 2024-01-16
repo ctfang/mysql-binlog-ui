@@ -30,11 +30,11 @@ func (f *Files) GetSystemFile() string {
 		ctx.LogError("file err = " + err.Error())
 		err.Error()
 	}
-	if path == "" {
-		return ""
-	}
+	return path
+}
 
-	err = mysql.SaveToSqlite(path)
+func (f *Files) SaveToSqlite(path string) string {
+	err := mysql.SaveToSqlite(path)
 	if err != nil {
 		return err.Error()
 	}

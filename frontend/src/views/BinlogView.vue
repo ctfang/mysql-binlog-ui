@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { genFileId } from "element-plus";
 import LogsList from "./binlog/LogsList.vue";
 import {
   GetSystemFile,
   GetDecodeRowCount,
+  SaveToSqlite,
 } from "@wailsjs/go/controllers/Files";
 import { ElMessageBox } from "element-plus";
 import { fa, tr } from "element-plus/es/locale/index.mjs";
@@ -29,38 +29,31 @@ const handleClose = (done: () => void) => {
 const childRef = ref();
 
 const submitUpload = () => {
-  let temp = 0; // 防止错误立刻返回
-
   GetSystemFile().then((res) => {
-    temp = 1;
-    percentage.value = 100;
     if (res != "") {
-      dialogVisible.value = false;
-      ElMessageBox.alert(res, "decode fail", {
-        type: "warning",
-        confirmButtonText: "OK",
+      percentage.value = 0;
+      dialogVisible.value = true;
+
+      var inteID = setInterval(() => {
+        if (percentage.value <= 98) {
+          percentage.value += 1;
+        } else if (percentage.value >= 100) {
+          dialogVisible.value = false;
+
+          clearInterval(inteID);
+        }
+        GetDecodeRowCount().then((res) => {
+          logCount.value = res;
+        });
+      }, 1000);
+
+      SaveToSqlite(res).then((res) => {
+        percentage.value = 100;
+        dialogVisible.value = false;
+        childRef.value.doSomething();
       });
     }
-
-    childRef.value.doSomething();
   });
-
-  if (temp == 0) {
-    dialogVisible.value = true;
-
-    var inteID = setInterval(() => {
-      if (percentage.value <= 98) {
-        percentage.value += 1;
-      } else if (percentage.value >= 100) {
-        dialogVisible.value = false;
-
-        clearInterval(inteID);
-      }
-      GetDecodeRowCount().then((res) => {
-        logCount.value = res;
-      });
-    }, 1000);
-  }
 };
 </script>
 

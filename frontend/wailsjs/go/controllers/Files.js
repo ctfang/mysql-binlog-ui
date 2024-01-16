@@ -17,3 +17,7 @@ export function GetSystemFile() {
 export function GetTitleList(arg1, arg2) {
   return window['go']['controllers']['Files']['GetTitleList'](arg1, arg2);
 }
+
+export function SaveToSqlite(arg1) {
+  return window['go']['controllers']['Files']['SaveToSqlite'](arg1);
+}

@@ -2,8 +2,8 @@ package apps
 
 import (
 	"changeme/apps/ctx"
+	"changeme/apps/orm"
 	"context"
-	"fmt"
 )
 
 // App struct
@@ -31,9 +31,19 @@ func (a *App) BeforeClose(ctx context.Context) (prevent bool) {
 }
 
 func (a *App) Shutdown(ctx context.Context) {
-	// Perform your teardown here
-}
+	if orm.DB != nil {
+		db, err := orm.DB.DB()
+		if err == nil {
+			db.Close()
+		}
+	}
 
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+	if orm.BinlogDBMap != nil {
+		for _, dbTemp := range orm.BinlogDBMap {
+			db, err := dbTemp.DB()
+			if err == nil {
+				db.Close()
+			}
+		}
+	}
 }
