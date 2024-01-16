@@ -25,7 +25,7 @@ func getSqliteDBName(binlogFilePath string) (dbPath, table string) {
 		table = arr[1]
 	}
 
-	return datas.GetSqlitePath(dbPath), table
+	return datas.GetSqlitePath(dbPath), "binlog_" + table
 }
 
 // GetDB 链接指定 db 必须手动关闭
