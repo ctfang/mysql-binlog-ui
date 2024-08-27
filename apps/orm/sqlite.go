@@ -25,10 +25,11 @@ func GetDB() *gorm.DB {
 // NewDB 每次都是新的
 func NewDB(dbPath string) *gorm.DB {
 	savePath := path.Dir(dbPath)
+	savePath = datas.ToPath(savePath)
 	if err := os.MkdirAll(savePath, 0755); err != nil {
 		return nil
 	}
-
+	dbPath = datas.ToPath(dbPath)
 	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{
 		Logger: NewSqlLog(logger.Config{
 			SlowThreshold: 0,

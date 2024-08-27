@@ -8,6 +8,18 @@ import (
 	"strings"
 )
 
+func ToPath(savePath string) string {
+	if runtime.GOOS != "windows" {
+		return savePath
+	}
+	savePath = strings.ReplaceAll(savePath, "\\", "/")
+	savePath = savePath[:3] + strings.ReplaceAll(savePath[3:], ":", "/")
+	savePath = strings.ReplaceAll(savePath, "//", "/")
+	savePath = strings.ReplaceAll(savePath, "-", "_")
+
+	return savePath
+}
+
 func GetDataDir(appName string) (string, error) {
 	var dataDir string
 

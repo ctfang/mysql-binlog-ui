@@ -3,15 +3,15 @@ package main
 import (
 	"changeme/apps"
 	"embed"
-	"log"
-	"runtime"
-
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
+	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
+	"log"
+	"runtime"
 )
 
 //go:embed all:frontend/dist
@@ -23,6 +23,14 @@ var icon []byte
 func main() {
 	// Create an instance of the app structure
 	app := apps.NewApp()
+
+	// menu
+	appMenu := menu.NewMenu()
+	if runtime.GOOS == "darwin" {
+		appMenu.Append(menu.AppMenu())
+		appMenu.Append(menu.EditMenu())
+		appMenu.Append(menu.WindowMenu())
+	}
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -40,15 +48,16 @@ func main() {
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
-		Menu:             nil,
-		Logger:           nil,
-		LogLevel:         logger.DEBUG,
-		OnStartup:        app.StartUp,
-		OnDomReady:       app.DomReady,
-		OnBeforeClose:    app.BeforeClose,
-		OnShutdown:       app.Shutdown,
-		WindowStartState: options.Normal,
-		Bind:             app.GetBind(),
+		Menu:                     appMenu,
+		EnableDefaultContextMenu: true,
+		Logger:                   nil,
+		LogLevel:                 logger.DEBUG,
+		OnStartup:                app.StartUp,
+		OnDomReady:               app.DomReady,
+		OnBeforeClose:            app.BeforeClose,
+		OnShutdown:               app.Shutdown,
+		WindowStartState:         options.Normal,
+		Bind:                     app.GetBind(),
 		// Windows platform specific options
 		Windows: &windows.Options{
 			WebviewIsTransparent:              true,

@@ -25,12 +25,16 @@ func getSqliteDBName(binlogFilePath string) (dbPath, table string) {
 		table = arr[1]
 	}
 
-	return datas.GetSqlitePath(dbPath), "binlog_" + table
+	gotPath := datas.GetSqlitePath(dbPath)
+	gotPath = datas.ToPath(gotPath)
+
+	return gotPath, "binlog_" + table
 }
 
 // GetDB 链接指定 db 必须手动关闭
 func GetDB(dbPath, table string) (*gorm.DB, error) {
 	savePath := path.Dir(dbPath)
+	savePath = datas.ToPath(savePath)
 	if err := os.MkdirAll(savePath, 0755); err != nil {
 		return nil, err
 	}
@@ -41,6 +45,7 @@ func GetDB(dbPath, table string) (*gorm.DB, error) {
 			LogLevel: logger.Warn, // 日志级别，你可以设置为logger.Silent以禁用日志
 		},
 	)
+	dbPath = datas.ToPath(dbPath)
 	db, err := gorm.Open(sqlite.Open(dbPath+".db"), &gorm.Config{
 		Logger: newLogger,
 	})
