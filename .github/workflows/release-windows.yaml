@@ -82,9 +82,7 @@ jobs:
       - name: Build Windows portable app
         shell: bash
         run: |
-          CGO_ENABLED=1 wails build -clean -platform ${{ matrix.platform }} \
-          -webview2 embed \
-          -ldflags "-X main.version=v${{ steps.normalise_version.outputs.version }} -X main.gaMeasurementID=${{ secrets.GA_MEASUREMENT_ID }} -X main.gaSecretKey=${{ secrets.WINDOWS_GA_SECRET }}"
+          CGO_ENABLED=1 wails build -clean -platform ${{ matrix.platform }}
 
       - name: Compress portable binary
         working-directory: ./build/bin
