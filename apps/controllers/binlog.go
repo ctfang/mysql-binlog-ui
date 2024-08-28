@@ -36,8 +36,6 @@ type DetailsList struct {
 }
 
 func (b Binlog) GetDetailsList(id int64, search *SearchBinlog) (*DetailsList, error) {
-	ctx.LogDebug("req", search)
-
 	data, ok := orm.NewOrmUploadLogs().WhereId(id).First()
 	if !ok {
 		return nil, errors.New("data not is exist")
@@ -46,7 +44,7 @@ func (b Binlog) GetDetailsList(id int64, search *SearchBinlog) (*DetailsList, er
 	database, table := data.Database, data.Table
 	model := orm.NewOrmBinlog(database, table).Order("id DESC").Order("id DESC")
 	if search.Table != "" {
-		model.Where("table = ?", search.Table)
+		model.Where("tables = ?", search.Table)
 	}
 	if search.Event != "" {
 		model.Where("event = ?", search.Event)

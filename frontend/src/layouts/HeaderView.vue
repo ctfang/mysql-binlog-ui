@@ -1,9 +1,18 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+
+import { Exit } from "@wailsjs/go/controllers/Help";
+import {WindowFullscreen, WindowMinimise} from "@wailsjs/runtime";
+
+</script>
 
 <template>
   <div>
     <div class="header-logo">
-      <div class="right-angle-triangle"></div>
+      <div class="window-controls">
+        <div class="button red" @click="Exit"></div>
+        <div class="button yellow" @click="WindowMinimise"></div>
+        <div class="button green" @click="WindowFullscreen"></div>
+      </div>
     </div>
 
     <div>
@@ -15,7 +24,7 @@
 <style scoped>
 .header-logo {
   position: absolute;
-  right: 20px;
+  left: 13px;
   height: 100%;
   box-sizing: border-box;
   padding-top: 9px;
@@ -29,19 +38,29 @@
   padding-top: 10px;
 }
 
-.right-angle-triangle {
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(
-    45deg,
-    rgb(231, 210, 210),
-    orange,
-    yellow,
-    rgb(255, 255, 255),
-    rgb(214, 214, 242),
-    rgb(211, 195, 224),
-    violet
-  );
-  transform: rotate(45deg);
+.window-controls {
+  display: flex;
+  gap: 8px;
+  border-radius: 6px;
+  width: fit-content;
+  margin: 4px auto;
+}
+
+.window-controls .button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.window-controls .button.yellow {
+  background-color: #fdbc40;
+}
+
+.window-controls .button.green {
+  background-color: #34c84a;
 }
 </style>

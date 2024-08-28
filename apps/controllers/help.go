@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"os"
 	"os/exec"
 	"runtime"
 )
@@ -26,4 +27,8 @@ func (h *Help) OpenURL(url string) error {
 	}
 
 	return exec.Command(cmd, args...).Start()
+}
+
+func (h *Help) Exit() {
+	os.Exit(0)
 }

@@ -79,9 +79,10 @@ defineExpose({ doSomething });
         prop="Database"
         label="Database"
         :formatter="dateDatabase"
+        min-width="100px"
       />
-      <el-table-column prop="Table" label="Table" width="100px" />
-      <el-table-column prop="FileSize" label="FileSize/MB" width="120px" />
+      <el-table-column prop="Table" label="Table" min-width="100px" />
+      <el-table-column prop="FileSize" label="FileSize/MB" min-width="120px" />
       <el-table-column
         prop="Timestamp"
         label="Timestamp"

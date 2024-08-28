@@ -14,3 +14,11 @@
 ```bash
 wails dev
 ```
+
+### 按照固定版本 Wails CLI v2.8.0
+go install github.com/wailsapp/wails/v2/cmd/wails@v2.8.0
+
+
+wails build  -platform  windows/amd64
+wails build  -platform  darwin/universal
+wails build  -platform  linux/amd64

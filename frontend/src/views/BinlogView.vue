@@ -4,7 +4,7 @@ import LogsList from "./binlog/LogsList.vue";
 import {
   GetSystemFile,
   GetDecodeRowCount,
-  SaveToSqlite,
+  SaveToSqlite, ClearAllData,
 } from "@wailsjs/go/controllers/Files";
 import { ElMessageBox } from "element-plus";
 import { fa, tr } from "element-plus/es/locale/index.mjs";
@@ -27,6 +27,14 @@ const handleClose = (done: () => void) => {
 };
 
 const childRef = ref();
+
+const submitClear = () => {
+  ElMessageBox.confirm("清空所有数据?").then(() => {
+    ClearAllData().then(()=>{
+      childRef.value.doSomething();
+    })
+  });
+};
 
 const submitUpload = () => {
   GetSystemFile().then((res) => {
@@ -62,6 +70,10 @@ const submitUpload = () => {
     <div>
       <el-button type="primary" @click="submitUpload">
         Import Binlog File
+      </el-button>
+
+      <el-button type="primary" @click="submitClear">
+        Clear ALL
       </el-button>
     </div>
 

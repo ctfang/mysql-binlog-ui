@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"changeme/apps/ctx"
+	"changeme/apps/datas"
 	"changeme/apps/mysql"
 	"changeme/apps/orm"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -43,6 +44,14 @@ func (f *Files) SaveToSqlite(path string) string {
 
 func (f *Files) GetDecodeRowCount() uint64 {
 	return mysql.DecodeRowCount
+}
+
+func (f *Files) ClearAllData() {
+	path, _ := datas.GetDataDir("mysql-binlog-ui/")
+	path = datas.ToPath(path)
+
+	// 删除所有目录
+	os.RemoveAll(path)
 }
 
 type TitleData struct {

@@ -99,6 +99,7 @@ const handleCurrentChange = (val: number) => {
         <el-select v-model="formInline.Event" placeholder="event" clearable>
           <el-option label="insert" value="insert" />
           <el-option label="update" value="update" />
+          <el-option label="delete" value="delete" />
         </el-select>
       </el-form-item>
       <el-form-item>
