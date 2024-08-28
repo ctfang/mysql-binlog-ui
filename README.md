@@ -10,7 +10,7 @@
 * NPM >= 9
 
 ### Compile and run
-
+[CONTRIBUTING.md](..%2F..%2Ftiny-rdm%2F.github%2FCONTRIBUTING.md)
 ```bash
 wails dev
 ```
