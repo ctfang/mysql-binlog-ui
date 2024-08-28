@@ -87,7 +87,7 @@ const handleCurrentChange = (val: number) => {
       :model="formInline.Table"
       class="search demo-form-inline"
     >
-      <el-form-item>
+      <el-form-item style="width: 100px">
         <el-input
           with="width: 100px"
           v-model="formInline.Table"
@@ -95,14 +95,14 @@ const handleCurrentChange = (val: number) => {
           clearable
         />
       </el-form-item>
-      <el-form-item>
+      <el-form-item style="width: 80px">
         <el-select v-model="formInline.Event" placeholder="event" clearable>
           <el-option label="insert" value="insert" />
           <el-option label="update" value="update" />
           <el-option label="delete" value="delete" />
         </el-select>
       </el-form-item>
-      <el-form-item>
+      <el-form-item style="width: 160px">
         <el-input
           with="width: 100px"
           v-model="formInline.Text"
